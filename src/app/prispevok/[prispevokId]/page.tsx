@@ -1,18 +1,18 @@
-// src/app/prispevok/[prispevokId]/page.tsx
+// src/app/prispevok/[id]/page.tsx
 
 import Typography from '@mui/material/Typography';
 
-export const metadata = {title: "Detail príspevku | Zoska"}
+export const metadata = {title: "Detail konkrétneho príspevku | Zoska"}
 
-export default function PostDetail({
+export default function PostDetail({ 
   params, 
 }: {
-  params: {prispevokId: string};
+  params: { prispevokId: string };
 }) {
   
-  return (
+  return ( 
       
-      <Typography> Detail konkrétneho prispevku {params.prispevokId}  </Typography>
+      <Typography> Detail konkrétneho príspevku číslo {params.prispevokId} </Typography>
       
   );
 }

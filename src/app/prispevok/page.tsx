@@ -2,13 +2,13 @@
 
 import Typography from '@mui/material/Typography';
 
-export const metadata = {title: "Zoznam prispevkov | Zoska"}
+export const metadata = {title: "Zoznam príspevkov | Zoska"}
 
 export default function PostList() {
   
   return (
       
-      <Typography> Zoznam prispevkov  </Typography>
+      <Typography> Zoznam príspevkov  </Typography>
       
   );
 }

@@ -2,7 +2,7 @@
 
 import Typography from '@mui/material/Typography';
 
-export const metadata = {title: "Upozornenina | Zoska"}
+export const metadata = {title: "Notifikácie | Zoska"}
 
 export default function Notifications() {
   

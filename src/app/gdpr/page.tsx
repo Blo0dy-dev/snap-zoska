@@ -2,13 +2,13 @@
 
 import Typography from '@mui/material/Typography';
 
-export const metadata = {title: "GDPR | Zoska"}
+export const metadata = {title: "Stránka s gdpr informáciami | Zoska"}
 
 export default function Gdpr() {
   
   return (
       
-      <Typography> GDPR </Typography>
+      <Typography> Stránka s gdpr informáciami  </Typography>
       
   );
 }

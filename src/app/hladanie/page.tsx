@@ -2,13 +2,13 @@
 
 import Typography from '@mui/material/Typography';
 
-export const metadata = {title: "Vyhladat profil | Zoska"}
+export const metadata = {title: "Vyhľadávanie | Zoska"}
 
 export default function Search() {
   
   return (
       
-      <Typography> Vyhladavanie  </Typography>
+      <Typography> Vyhľadávanie  </Typography>
       
   );
 }

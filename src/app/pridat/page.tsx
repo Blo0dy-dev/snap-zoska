@@ -2,13 +2,13 @@
 
 import Typography from '@mui/material/Typography';
 
-export const metadata = {title: "Formular prispevkov | Zoska"}
+export const metadata = {title: "Formulár na pridanie príspevku | Zoska"}
 
-export default function AddPostList() {
+export default function AddPost() {
   
   return (
       
-      <Typography> Formular na pridanie príspevku  </Typography>
+      <Typography> Formulár na pridanie príspevku </Typography>
       
   );
 }
