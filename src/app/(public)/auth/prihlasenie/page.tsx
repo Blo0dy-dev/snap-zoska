@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import { signIn } from 'next-auth/react'; // Importing the signIn method
 import Box from '@mui/material/Box'; // Importing Box for layout
 
+
 export default function SignIn() {
   return (
     <Box
@@ -23,7 +24,7 @@ export default function SignIn() {
       <Button 
         variant="contained" 
         color="primary" 
-        onClick={() => signIn('google', { callbackUrl: '/' })} // Sign in via Google
+        onClick={() => signIn('google', { callbackUrl: '/prispevok' })} // Sign in via Google
         sx={{ marginTop: '20px' }}
       >
         Prihlásiť sa cez Google
@@ -31,3 +32,5 @@ export default function SignIn() {
     </Box>
   );
 }
+
+

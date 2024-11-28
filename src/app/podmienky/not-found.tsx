@@ -8,7 +8,7 @@ export default function NotFound() {
   
   return (
     <Container>
-      <Typography> Nič také sa u nás nenachádza  </Typography>
+      <Typography> Nič </Typography>
     </Container>  
   );
 }
