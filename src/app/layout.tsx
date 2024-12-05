@@ -1,14 +1,13 @@
 // src/app/layout.tsx
-
 import { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/NavBar";
 import AuthProvider from "../components/AuthProvider";
+import ThemeProvider from "@/components/ThemeProvider"; // Import the ThemeProvider
 
-// Global metadata for the entire site
 export const metadata: Metadata = {
-  title: "SnapZoška", // You can customize this
-  description: "Created by students of SPŠE Zochova 9, Bratislava", // Customize this as well
+  title: "SnapZoška",
+  description: "Created by students of SPŠE Zochova 9, Bratislava",
 };
 
 export default function RootLayout({
@@ -19,16 +18,15 @@ export default function RootLayout({
   return (
     <html lang="sk">
       <body>
-        <AuthProvider> {/* Provides session context for the entire app */}
-          <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-            <main style={{ flexGrow: 1 }}>
-              {children} {/* Renders the specific page content */}
-            </main>
-          </div>
-          <Navbar /> {/* Navbar available on all pages */}
-        </AuthProvider>
+        <ThemeProvider> {/* Wrap the entire app in ThemeProvider */}
+          <AuthProvider> {/* Provides session context */}
+            <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+              <main style={{ flexGrow: 1 }}>{children}</main>
+            </div>
+            <Navbar /> {/* Navbar is always available */}
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
-

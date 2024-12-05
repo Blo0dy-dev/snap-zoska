@@ -1,5 +1,6 @@
 import AuthGuard from "@/components/AuthGuard";
 
+
 export const metadata = {
   title: "Private | Zoska",
   description: "Private layout for authenticated users",
