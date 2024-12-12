@@ -19,6 +19,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import Link from "next/link";
 import IconButton from "@mui/material/IconButton";
 import { useSession } from "next-auth/react";
+import { Avatar } from "@mui/material"; // Import Avatar component
 import { useThemeMode } from "@/components/ThemeProvider";
 
 export default function NavBar() {
@@ -28,7 +29,7 @@ export default function NavBar() {
 
   const unauthNavItems = [
     { label: "Domov", icon: <HomeIcon />, href: "/" },
-    { label: "GDPR", icon: <PolicyIcon />, href: "/gdpr" },
+    { label: "O mne", icon: <PolicyIcon />, href: "/o-mne" },
     { label: "Registrácia", icon: <AppRegistrationIcon />, href: "/auth/registracia" },
   ];
 
@@ -36,7 +37,7 @@ export default function NavBar() {
     { label: "Domov", icon: <HomeIcon />, href: "/prispevok" },
     { label: "Hľadanie", icon: <SearchIcon />, href: "/hladanie" },
     { label: "Pridať", icon: <AddCircleIcon />, href: "/pridat" },
-    { label: "Profil", icon: <PersonIcon />, href: "/profil" },
+    
   ];
 
   return (
@@ -57,6 +58,16 @@ export default function NavBar() {
             href={item.href}
           />
         ))}
+
+        {/* Show profile picture if user is authenticated */}
+        {session?.user?.image && (
+          <BottomNavigationAction
+            label="Profil"
+            icon={<Avatar src={session.user.image} alt="Profile Picture" />}
+            component={Link}
+            href="/profil"
+          />
+        )}
 
         {!session ? (
           <BottomNavigationAction

@@ -13,6 +13,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
+  debug: true,
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: '/auth/prihlasenie',
@@ -20,9 +21,9 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
-      // If the user is logging in (baseUrl is the home page), redirect to /prispevok
-      if (url === baseUrl) {
-        return '/prispevok';  // Always redirect to /prispevok after login
+      // If the user is logging in and is redirected to the home page, force a redirect to /prispevok
+      if (url === baseUrl || url === '/') {
+        return '/prispevok';  // Redirect to /prispevok after login
       }
       return url;  // Default behavior for other redirections (like after sign-out)
     },
