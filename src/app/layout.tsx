@@ -23,10 +23,11 @@ export default function RootLayout({
             <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
               <main style={{ flexGrow: 1 }}>{children}</main>
             </div>
-            <Navbar /> {/* Navbar is always available */}
+            <Navbar /> {/* Navbar is always available , caf */}
           </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+/* test*/
