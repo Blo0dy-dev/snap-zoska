@@ -1,4 +1,4 @@
-// src/app/prispevok/page.tsx
+// src/app/(private)/prispevok/page.tsx
 
 import Link from 'next/link';
 import { PrismaClient } from '@prisma/client';
@@ -22,18 +22,6 @@ async function getPosts() {
     console.error('Error fetching posts:', error);
     return [];
   }
-}
-
-interface PostListProps {
-  posts: {
-    id: string;
-    caption: string;
-    imageUrl: string;
-    createdAt: string;
-    user: {
-      name: string;
-    };
-  }[]; 
 }
 
 export default async function PostList() {

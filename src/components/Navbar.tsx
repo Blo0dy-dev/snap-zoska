@@ -13,7 +13,6 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import PolicyIcon from "@mui/icons-material/Policy";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import PersonIcon from "@mui/icons-material/Person";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import Link from "next/link";
