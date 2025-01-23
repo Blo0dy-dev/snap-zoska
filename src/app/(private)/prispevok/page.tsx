@@ -1,5 +1,3 @@
-// src/app/(private)/prispevok/page.tsx
-
 import Link from 'next/link';
 import { PrismaClient } from '@prisma/client';
 import Typography from '@mui/material/Typography';
@@ -52,7 +50,7 @@ export default async function PostList() {
                   '&:hover': {
                     transform: 'translateY(-10px)', // Hover effect
                   },
-                  backgroundColor: 'white', // Ensure the cards are white
+                  backgroundColor: 'background.paper',  // Make sure background changes with theme
                 }}
               >
                 <CardMedia
@@ -73,7 +71,10 @@ export default async function PostList() {
                   <Typography variant="body2" color="textSecondary" gutterBottom>
                     {new Date(post.createdAt).toLocaleDateString()}
                   </Typography>
-                  <Typography variant="body1" color="text.primary">
+                  <Typography
+                    variant="body1"
+                    color="text.primary"  // Set the text color to primary which adjusts based on theme
+                  >
                     {post.caption}
                   </Typography>
                 </CardContent>
