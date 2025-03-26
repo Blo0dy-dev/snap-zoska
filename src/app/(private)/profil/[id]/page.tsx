@@ -3,9 +3,11 @@ import { Box, Button, Typography, Avatar, Grid, Card, CardMedia, Divider } from 
 
 const prisma = new PrismaClient();
 
-export const metadata = { title: "Detail profilu | Zoska" };
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const user = await prisma.user.findUnique({ where: { id: params.id }, select: { name: true } });
+  return { title: user?.name ? `Profil | ${user.name}` : "Detail profilu" };
+}
 
-// Server-side fetch používateľa a jeho príspevkov
 async function getUserProfile(userId: string) {
   try {
     return await prisma.user.findUnique({
@@ -42,14 +44,9 @@ export default async function ProfileDetail({ params }: { params: { id: string }
 
   return (
     <Box sx={{ maxWidth: 900, margin: "auto", padding: 3 }}>
-      {/* Profilová hlavička */}
       <Box display="flex" alignItems="center" mb={4} gap={3}>
-        <Avatar 
-          src={user.image || ""} 
-          sx={{ width: 120, height: 120, boxShadow: 3 }} 
-        />
+        <Avatar src={user.image || ""} sx={{ width: 120, height: 120, boxShadow: 3 }} />
         <Box sx={{ width: "100%" }}>
-          {/* Meno a Follow tlačidlo vedľa seba */}
           <Box display="flex" alignItems="center" gap={2} mb={1}>
             <Typography variant="h5" fontWeight="bold">{user.name || "Neznámy používateľ"}</Typography>
             <Button 
@@ -60,7 +57,6 @@ export default async function ProfileDetail({ params }: { params: { id: string }
             </Button>
           </Box>
 
-          {/* Followers & Following zarovnané na začiatok */}
           <Box display="flex" gap={3}>
             <Typography variant="body1" fontWeight="bold">
               123 <span style={{ color: "gray", fontWeight: "normal" }}>Followers</span>
@@ -72,9 +68,8 @@ export default async function ProfileDetail({ params }: { params: { id: string }
         </Box>
       </Box>
 
-      <Divider sx={{ mb: 3 }} /> {/* Čistý oddelovač medzi profilom a príspevkami */}
+      <Divider sx={{ mb: 3 }} />
 
-      {/* Grid príspevkov */}
       <Typography variant="h6" gutterBottom fontWeight="bold">Príspevky</Typography>
       {user.posts.length > 0 ? (
         <Grid container spacing={2}>

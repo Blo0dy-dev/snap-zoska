@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { TextField, Typography, List, ListItem, Avatar, CircularProgress, Box } from "@mui/material";
-import { searchUsers } from "@/app/actions/users"; // Import serverovej akcie
+import { searchUsers } from "@/app/actions/users";
+import Link from "next/link";
 
 // Opravený typ User – podporuje `null` hodnoty z Prisma
 interface User {
@@ -14,10 +15,9 @@ interface User {
 
 export default function Search() {
   const [query, setQuery] = useState<string>("");
-  const [users, setUsers] = useState<User[]>([]); // Použitie User[]
+  const [users, setUsers] = useState<User[]>([]);
   const [isPending, startTransition] = useTransition();
 
-  // Načítanie všetkých používateľov pri prvom načítaní stránky
   useEffect(() => {
     startTransition(async () => {
       const result = await searchUsers("");
@@ -56,11 +56,10 @@ export default function Search() {
         sx={{ maxWidth: 500, marginBottom: 3 }}
       />
       {isPending && <CircularProgress style={{ marginBottom: 20 }} />}
-      
-      {/* Zoznam používateľov bez scrollovania */}
+
       <List sx={{ width: "100%", maxWidth: 500 }}>
         {users.map((user) => (
-          <ListItem key={user.id}>
+          <ListItem key={user.id} component={Link} href={`/profil/${user.id}`} style={{ textDecoration: "none", color: "inherit" }}>
             <Avatar src={user.image || ""} />
             <Typography style={{ marginLeft: 10 }}>{user.name ?? user.email}</Typography>
           </ListItem>

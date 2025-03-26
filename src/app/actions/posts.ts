@@ -1,54 +1,71 @@
-// src/app/actions/posts.ts
-
 "use server";
 
-// Import Prisma client
 import { prisma } from "@/app/api/auth/[...nextauth]/prisma";
 
-// Fetch all posts
 export const fetchPosts = async () => {
   try {
-    const posts = await prisma.post.findMany({
+    return await prisma.post.findMany({
+      include: {
+        user: true,
+        images: true,
+        likes: true,
+        comments: { include: { user: true } },
+        bookmarks: true,
+      },
       orderBy: { createdAt: "desc" },
-      include: { user: true }, // Include user who created the post
     });
-
-    return posts;
   } catch (error) {
     console.error("Error fetching posts:", error);
     throw new Error("Could not fetch posts");
   }
 };
 
-// Fetch posts by a specific user ID
-export const fetchPostsByUserId = async (userId: string) => {
+export const likePost = async (postId: string, userId: string) => {
   try {
-    const posts = await prisma.post.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
+    const existingLike = await prisma.like.findFirst({
+      where: { postId, userId },
     });
 
-    return posts;
+    if (existingLike) {
+      await prisma.like.delete({ where: { id: existingLike.id } });
+      return { action: 'unlike' };
+    } else {
+      await prisma.like.create({ data: { postId, userId } });
+      return { action: 'like' };
+    }
   } catch (error) {
-    console.error("Error fetching posts by userId:", error);
-    throw new Error("Could not fetch posts");
+    console.error("Error updating like:", error);
+    throw new Error("Could not update like");
   }
 };
 
-// Create a new post
-export const createPost = async (userId: string, imageUrl: string, caption?: string) => {
+export const addComment = async (postId: string, userId: string, content: string) => {
   try {
-    const newPost = await prisma.post.create({
-      data: {
-        userId,
-        imageUrl,
-        caption,
-      },
+    return await prisma.comment.create({
+      data: { postId, userId, content },
+      include: { user: true },
+    });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    throw new Error("Could not add comment");
+  }
+};
+
+export const toggleBookmark = async (postId: string, userId: string) => {
+  try {
+    const existingBookmark = await prisma.bookmark.findFirst({
+      where: { postId, userId },
     });
 
-    return newPost;
+    if (existingBookmark) {
+      await prisma.bookmark.delete({ where: { id: existingBookmark.id } });
+      return { action: 'remove' };
+    } else {
+      await prisma.bookmark.create({ data: { postId, userId } });
+      return { action: 'add' };
+    }
   } catch (error) {
-    console.error("Error creating post:", error);
-    throw new Error("Could not create post");
+    console.error("Error updating bookmark:", error);
+    throw new Error("Could not update bookmark");
   }
 };
