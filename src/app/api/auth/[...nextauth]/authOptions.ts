@@ -20,12 +20,17 @@ export const authOptions: NextAuthOptions = {
     signOut: '/auth/odhlasenie',
   },
   callbacks: {
-    async redirect({ url, baseUrl }: { url: string, baseUrl: string }) {
-      // If the user is logging in and is redirected to the home page, force a redirect to /prispevok
+    async redirect({ url, baseUrl }) {
       if (url === baseUrl || url === '/') {
-        return '/prispevok';  // Redirect to /prispevok after login
+        return '/prispevok';
       }
-      return url;  // Default behavior for other redirections (like after sign-out)
+      return url;
+    },
+    async session({ session, user }) {
+      if (session.user) {
+        session.user.id = user.id;
+      }
+      return session;
     },
   },
 };

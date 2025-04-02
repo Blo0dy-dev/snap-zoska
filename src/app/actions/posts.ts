@@ -69,3 +69,21 @@ export const toggleBookmark = async (postId: string, userId: string) => {
     throw new Error("Could not update bookmark");
   }
 };
+
+export const deleteComment = async (commentId: string, userId: string) => {
+  try {
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentId },
+    });
+    if (comment?.userId !== userId) {
+      throw new Error("Not authorized to delete this comment");
+    }
+    await prisma.comment.delete({
+      where: { id: commentId },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    throw new Error("Could not delete comment");
+  }
+};

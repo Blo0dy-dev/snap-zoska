@@ -1,64 +1,97 @@
+// src/app/(private)/profil/[id]/page.tsx
+
 import { PrismaClient } from "@prisma/client";
-import { Box, Typography, Card, CardMedia, Avatar } from "@mui/material";
+import { Box, Typography, Avatar, Card, CardMedia } from "@mui/material";
 
 const prisma = new PrismaClient();
 
-async function getPostById(prispevokId: string) {
+async function getUserProfile(userId: string) {
   try {
-    return await prisma.post.findUnique({
-      where: { id: prispevokId },
+    return await prisma.user.findUnique({
+      where: { id: userId },
       include: {
-        user: true,        // autor príspevku
-        images: true       // obrázky z PostImage tabuľky
+        posts: {
+          // Použijeme select, aby sme vybrali len potrebné polia z príspevkov,
+          // pričom obrázky vyberieme zo vzťahu images.
+          select: {
+            id: true,
+            // Ak potrebuješ vybrať ďalšie polia z Post, pridaj ich sem.
+            images: {
+              select: {
+                id: true,
+                imageUrl: true,
+              },
+            },
+          },
+        },
+        profile: true,
       },
     });
   } catch (error) {
-    console.error("Chyba pri načítavaní príspevku:", error);
+    console.error("Chyba pri načítavaní profilu:", error);
     return null;
   }
 }
 
-export default async function PostDetail({ params }: { params: { prispevokId: string } }) {
-  const post = await getPostById(params.prispevokId);
+export default async function ProfilePage({ params }: { params: { id: string } }) {
+  const user = await getUserProfile(params.id);
 
-  if (!post) {
+  if (!user) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-        <Typography variant="h5" color="error">Príspevok neexistuje.</Typography>
+        <Typography variant="h5" color="error">
+          Profil neexistuje.
+        </Typography>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ maxWidth: 700, margin: "auto", padding: 3 }}>
-      {/* Informácie o autorovi */}
-      <Box display="flex" alignItems="center" mb={2} gap={2}>
-        <Avatar src={post.user.image || ""} sx={{ width: 50, height: 50 }} />
-        <Typography variant="h6">{post.user.name || "Neznámy používateľ"}</Typography>
+    <Box sx={{ maxWidth: 800, margin: "auto", padding: 3 }}>
+      {/* Informácie o používateľovi */}
+      <Box display="flex" alignItems="center" mb={3}>
+        <Avatar src={user.image || ""} sx={{ width: 80, height: 80 }} />
+        <Box ml={2}>
+          <Typography variant="h5">{user.name || "Neznámy používateľ"}</Typography>
+          <Typography variant="body2" color="textSecondary">
+            {user.email}
+          </Typography>
+        </Box>
       </Box>
 
-      {/* Obrázky príspevku */}
-      {post.images.length > 0 && post.images.map((img, index) => (
-        <Card
-          key={img.id}
-          sx={{ borderRadius: 3, overflow: "hidden", boxShadow: 2, mb: 2 }}
-        >
-          <CardMedia
-            component="img"
-            image={img.imageUrl}
-            alt={`Obrázok ${index + 1}`}
-            sx={{ width: "100%", height: 500, objectFit: "cover" }}
-          />
-        </Card>
-      ))}
+      {/* Profilové informácie */}
+      {user.profile && (
+        <Box mb={3}>
+          <Typography variant="body1">{user.profile.bio}</Typography>
+        </Box>
+      )}
 
-      {/* Textový obsah */}
-      <Box mt={2}>
-        <Typography variant="body1" fontWeight="bold">{post.user.name}</Typography>
-        <Typography variant="body2" color="textSecondary">
-          {new Date(post.createdAt).toLocaleDateString()}
+      {/* Zoznam príspevkov používateľa */}
+      <Box>
+        <Typography variant="h6" gutterBottom>
+          Príspevky:
         </Typography>
-        <Typography variant="body1" mt={1}>{post.caption}</Typography>
+        {user.posts.length > 0 ? (
+          user.posts.map((post) => (
+            <Card
+              key={post.id}
+              sx={{ mb: 2, borderRadius: 2, overflow: "hidden", boxShadow: 2 }}
+            >
+              {post.images.length > 0 && (
+                <CardMedia
+                  component="img"
+                  image={post.images[0].imageUrl} // Správne načítanie URL obrázku z vzťahu images
+                  alt="Obrázok príspevku"
+                  sx={{ height: 300, objectFit: "cover" }}
+                />
+              )}
+            </Card>
+          ))
+        ) : (
+          <Typography variant="body2" color="textSecondary">
+            Tento používateľ zatiaľ nemá príspevky.
+          </Typography>
+        )}
       </Box>
     </Box>
   );
